@@ -18,9 +18,9 @@ suitable for production use and users should develop their own reconstruction ma
 
 int RecoE1039Data(const int nEvents = 1)
 {
-  const bool cosmic = true;
+  const bool cosmic = false;
 
-  const bool legacy_rec_container = false;
+  const bool legacy_rec_container = true;
   const double FMAGSTR = -1.054;
   const double KMAGSTR = -0.951;
 
@@ -30,6 +30,7 @@ int RecoE1039Data(const int nEvents = 1)
   if(cosmic)
   {
     rc->init("cosmic");
+    rc->init("");
     rc->set_BoolFlag("COARSE_MODE", true);
     rc->set_DoubleFlag("KMAGSTR", 0.);
     rc->set_DoubleFlag("FMAGSTR", 0.);
@@ -39,10 +40,14 @@ int RecoE1039Data(const int nEvents = 1)
   Fun4AllServer* se = Fun4AllServer::instance();
   se->Verbosity(0);
 
-  //GeomSvc* geom_svc = GeomSvc::instance();
+  GeomSvc* geom_svc = GeomSvc::instance();
+  for(int i = 1; i<=62; i++){
+    cout << i << " : " << geom_svc->isChamber(i) << " " << geom_svc->isHodo(i) << " " 
+	 << geom_svc->isPropTube(i) << " " << geom_svc->isDPHodo(i) << endl;
+  }
 
   CalibDriftDist* cal_dd = new CalibDriftDist();
-  se->registerSubsystem(cal_dd);
+  //se->registerSubsystem(cal_dd);
 
   SQReco* reco = new SQReco();
   reco->Verbosity(0);
@@ -59,7 +64,8 @@ int RecoE1039Data(const int nEvents = 1)
 
   Fun4AllInputManager* in = new Fun4AllDstInputManager("DSTIN");
   in->Verbosity(0);
-  in->fileopen("data.root");
+  //in->fileopen("data.root");
+  in->fileopen("DST.root");
   se->registerInputManager(in);
 
   Fun4AllDstOutputManager* out = new Fun4AllDstOutputManager("DSTOUT", "result.root");

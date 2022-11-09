@@ -219,6 +219,7 @@ int RecoE1039Sim(const int nevent = 10, TString prefix = "run", int seed = 12345
 
   // input - we need a dummy to drive the event loop
   Fun4AllInputManager *in = new Fun4AllDummyInputManager("DUMMY");
+  
   se->registerInputManager(in);
 
   ///////////////////////////////////////////
